@@ -2,16 +2,26 @@ import React from 'react';
 
 const Home = () => {
   return (
-    <div>
+    <div className=''>
       <h1>درباره پروژه</h1>
       <p>
-        سلام! من [ امیر خوش] هستم و این پروژه را برای نمایش کاراکترها، اپیزودها و مکان‌های سریال ریک و مورتی ساخته‌ام. این پروژه از API ریک و مورتی استفاده می‌کند تا اطلاعات مربوط به کاراکترها، اپیزودها و مکان‌ها را دریافت و نمایش دهد.
+        Hi! I'm Amir Khosh, and I created this project
+         to showcase characters, episodes, and locations
+          from the Rick and Morty series. <br/>This project uses 
+          the Rick and Morty API to fetch and display
+           information about the characters, episodes,
+            and locations.
       </p>
+      <br/>
       <p>
-        این پروژه با استفاده از کتابخانه React ساخته شده و برای مدیریت مسیریابی (Routing) از React Router استفاده شده است. همچنین، از CSS برای استایل‌دهی استفاده شده است.
+        The project is built using the React library and 
+        utilizes React Router for routing management.
+         Additionally, CSS is used for styling.
       </p>
+      <br/>
       <p>
-   اگر سوالی دارید یا می‌خواهید با من در تماس باشید،  
+        If you have any questions or want to get in touch
+         with me, please feel free to contact me.
       </p>
     </div>
   );

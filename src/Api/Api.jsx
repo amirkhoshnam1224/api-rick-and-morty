@@ -11,5 +11,17 @@ export const getCharacters = ()=>{
     .catch(error=> console.log(error));
 
 }
+export const getEpisodes = ()=>{
+    return api.get('/episode')
+    .then(response=>response.data.results)
+    .catch(error=> console.log(error));
+
+}
+export const getLocation = ()=>{
+    return api.get('/location')
+    .then(response=>response.data.results)
+    .catch(error=> console.log(error));
+
+}
 
 export default api;
