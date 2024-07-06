@@ -1,5 +1,5 @@
 import React from "react";
-import CustomCard from '../Card/Card'
+import CustomCard from '../CharacterCard/Card'
 function CharacterList({filteredCharacters }) {
     return (
         <>
@@ -12,9 +12,6 @@ function CharacterList({filteredCharacters }) {
                         image={character.image}
                         status={character.status}
                         species={character.species}
-                        type={character.type}
-                        origin={character.origin}
-                        location={character.location}
                     />
                 ))}
             </ul>

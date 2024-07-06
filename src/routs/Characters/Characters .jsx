@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Characters.css';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilterBar from '../../components/FilterBar/FilterBar';
-import CharacterList from '../../components/CharacterList/CharacterList';
+import CharacterList from '../../components/Character/CharacterList/CharacterList';
 import {getCharacters} from '../../Api/Api'
 function Characters() {
   const [characters, setCharacters] = useState([]);

@@ -1,28 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { getEpisodes } from '../../Api/Api'
-import CardEpisode from '../../components/CardEpisode/CardEpisode';
+import SearchBar from '../..//components/SearchBar/SearchBar';
+import EpisodeButton from '../../components/Episode/EpisodeButton/EpisodeButton';
+import EpisodeList from '../../components/Episode/EpisodeList/EpisodeList';
+
 const Episodes = () => {
   const [episodes, setEpisodes] = useState([]);
+  const [search, setSearch] = useState('');
+  const [seasonFilter, setSeasonFilter] = useState('all');
+
+
   useEffect(() => {
     getEpisodes()
       .then(data => setEpisodes(data))
       .catch(error => console.log(error))
   }, []);
 
+  const filteredEpisodes = episodes.filter((episode) => {
+    const episodeSeason = episode.episode.split('E')[0];
+    const seasonMatch = seasonFilter === 'all' || episodeSeason === seasonFilter;
+    const nameMatch = episode.name.toLowerCase().includes(search.toLowerCase());
+    return seasonMatch && nameMatch;
+  });
+
   return (
-    <div>
+    <div className='flex flex-col justify-center items-center'>
       <h1>Episodes Page</h1>
-      <ul className="mt-9 grid grid-cols-3 gap-9 md:grid-cols-4 lg:grid-cols-6 flex justify-center items-center">
-        {episodes.map((episode) => (
-          <CardEpisode
-            key={episode.id}
-            name={episode.name}
-            air_date={episode.air_date}
-            episode={episode.episode}
-            characters={episode.characters}
-          />
-        ))}
-      </ul>
+      <SearchBar search={search} setSearch={setSearch} />
+
+      <EpisodeButton
+        setSeasonFilter={setSeasonFilter}
+      />
+<EpisodeList
+filteredEpisodes={filteredEpisodes}
+/>
+ 
     </div>
   );
 }

@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
-function CustomCard({ name, gender, image, status, species, type, origin, location }) {
+function CustomCard({ name, gender, image, status, species}) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
