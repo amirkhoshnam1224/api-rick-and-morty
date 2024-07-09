@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { getEpisodes } from '../../Api/Api'
-import SearchBar from '../..//components/SearchBar/SearchBar';
+import { getEpisodes } from '../../Api/Api';
+import SearchBar from '../../components/SearchBar/SearchBar';
 import EpisodeButton from '../../components/Episode/EpisodeButton/EpisodeButton';
 import EpisodeList from '../../components/Episode/EpisodeList/EpisodeList';
+import  Pagination  from '../../components/Pagination/Pagination';
 
 const Episodes = () => {
   const [episodes, setEpisodes] = useState([]);
   const [search, setSearch] = useState('');
   const [seasonFilter, setSeasonFilter] = useState('all');
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const PageSize = 12;
 
   useEffect(() => {
     getEpisodes()
       .then(data => setEpisodes(data))
-      .catch(error => console.log(error))
+      .catch(error => console.log(error));
   }, []);
 
   const filteredEpisodes = episodes.filter((episode) => {
@@ -23,20 +25,27 @@ const Episodes = () => {
     return seasonMatch && nameMatch;
   });
 
-  return (
-    <div className='flex flex-col justify-center items-center'>
-      <h1>Episodes Page</h1>
-      <SearchBar search={search} setSearch={setSearch} />
+  const pageCount = Math.ceil(filteredEpisodes.length / PageSize);
+  const currentEpisodes = filteredEpisodes.slice((currentPage - 1) * PageSize, currentPage * PageSize);
 
-      <EpisodeButton
-        setSeasonFilter={setSeasonFilter}
+  const changePage = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  return (
+    <div className='flex flex-col justify-center items-center bg-customBlack p-4'>
+      <SearchBar search={search} setSearch={setSearch} />
+      <h1 className="text-customgreen p-2"> Episodes </h1>
+      <EpisodeButton setSeasonFilter={setSeasonFilter} />
+      <EpisodeList filteredEpisodes={currentEpisodes} />
+      
+      <Pagination
+        currentPage={currentPage}
+        pageCount={pageCount}
+        onPageChange={changePage} 
       />
-<EpisodeList
-filteredEpisodes={filteredEpisodes}
-/>
- 
     </div>
   );
-}
+};
 
 export default Episodes;

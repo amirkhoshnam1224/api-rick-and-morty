@@ -23,8 +23,7 @@ const Locations = () => {
   });
 
   return (
-    <div>
-      <h1>Locations Page</h1>
+    <div className='bg-customBlack flex flex-col justify-center items-center pt-4'>
       <LocationFilter
         typeFilter={typeFilter}
         setTypeFilter={setTypeFilter}

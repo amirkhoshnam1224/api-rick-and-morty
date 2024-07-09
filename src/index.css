@@ -14,3 +14,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+@font-face {
+  font-family: 'CustomFont';
+  src: url('../public/get_schwifty.ttf') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.navbar {
+  font-family: 'CustomFont', sans-serif;
+}
