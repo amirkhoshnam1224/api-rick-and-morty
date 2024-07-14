@@ -1,5 +1,5 @@
 .navbar {
- 
+
   color: white;
   padding: 10px 0;
   padding-top: 20px;
@@ -79,18 +79,4 @@
   
 }
 
-.rick{
-  color: #208108;
-  font-size: 30px;
-  max-width: 1200px;
-  font-family: 'CustomFont';
-}
-@media(max-width: 768px){
-  .rick {
-    color: #208108;
-    max-width: 200px;
-    font-size: 6px;
-    font-family: 'CustomFont';
-  }
-  
-}
+

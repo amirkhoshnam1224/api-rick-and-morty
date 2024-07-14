@@ -4,11 +4,13 @@ import Episodes from './routs/Episodes/Episodes.jsx'
 import Locations from './routs/Locations/Locations.jsx'
 import Characters from './routs/Characters/Characters .jsx'
 import Navbar from './components/Navbar/Navbar.jsx'
-
+import Shop from './routs/Shop/Shop.jsx';
 import './App.css';
+import {ShopProvider} from './ContextApi/Context.jsx'
 
 function App() {
   return (
+    <ShopProvider>
     <div className="App">
       <Router>
         <Navbar />
@@ -17,9 +19,12 @@ function App() {
           <Route path="/characters" element={<Characters />} />
           <Route path="/episodes" element={<Episodes />} />
           <Route path="/locations" element={<Locations />} />
+          <Route path="/Shop" element={<Shop />} />
         </Routes>
       </Router>
     </div>
+    </ShopProvider>
+
   );
 }
 

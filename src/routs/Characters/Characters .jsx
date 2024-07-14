@@ -32,7 +32,7 @@ function Characters() {
 
   const pageCount = Math.ceil(filteredCharacters.length / PageSize);
   const currentCharacters = filteredCharacters.slice((currentPage - 1) * PageSize, currentPage * PageSize);
-  console.log(currentCharacters)
+
   const changePage = (newPage) => {
     setCurrentPage(newPage);
   };
