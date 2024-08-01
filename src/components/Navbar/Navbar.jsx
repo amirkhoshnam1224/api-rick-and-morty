@@ -40,11 +40,14 @@ const Navbar = () => {
           </span>
         </button>
       </div>
-      
-      <div className="w-8 flex flex-col ">
+
+      <Link to="/cart" className=''>
+        <div className="w-8 flex flex-col ">
           <img src={shopLogo} alt="Shop Logo" className="" />
           <h1 className="">{totalClicks}</h1>
-      </div>
+        </div>
+      </Link>
+      
     </nav>
   );
 }

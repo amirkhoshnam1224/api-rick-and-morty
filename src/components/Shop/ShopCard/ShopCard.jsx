@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { ShopContext } from '../../../ContextApi/Context';
-
+import { Link } from 'react-router-dom';
 function ShopCard({ character }) {
   const { handleButtonPlusClick, handleButtonDecreaseClick, clickCounts } = useContext(ShopContext);
   const [showButtons, setShowButtons] = useState(false);
@@ -40,7 +40,12 @@ function ShopCard({ character }) {
           >
             -
           </button>
+          <Link to="/cart" className=''>
+            <button className="bg-blue-500 text-white rounded-md hover:bg-blue-700"
+            >Continue shopping</button>
+          </Link>
         </div>
+
       )}
     </div>
   );
