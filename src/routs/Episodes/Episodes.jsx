@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { getEpisodes } from '../../Api/Api';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import EpisodeButton from '../../components/Episode/EpisodeButton/EpisodeButton';
 import EpisodeList from '../../components/Episode/EpisodeList/EpisodeList';
-import  Pagination  from '../../components/Pagination/Pagination';
+import Pagination from '../../components/Pagination/Pagination';
+import axios from 'axios';
 
 const Episodes = () => {
   const [episodes, setEpisodes] = useState([]);
@@ -12,17 +12,54 @@ const Episodes = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const PageSize = 12;
 
+  const fetchAllEpisodes = async () => {
+    let allEpisodes = [];
+    let page = 1;
+    let hasMorePages = true;
+    try {
+      while (hasMorePages) {
+        const response = await axios.get('https://rickandmortyapi.com/api/episode', {
+          params: {
+            page: page,
+            episode: seasonFilter !== 'all' ? `${seasonFilter}` : undefined,
+          },
+        });
+        allEpisodes = [...allEpisodes, ...response.data.results];
+        if (!response.data.info.next) {
+          hasMorePages = false;
+        } else {
+          page += 1;
+        }
+      }
+      setEpisodes(allEpisodes);
+    } catch (error) {
+      console.error('Error fetching episodes:', error);
+    }
+  };
+
+  const fetchEpisodesBySearch = async () => {
+    try {
+      const response = await axios.get('https://rickandmortyapi.com/api/episode', {
+        params: {
+          name: search,
+        },
+      });
+      setEpisodes(response.data.results);
+    } catch (error) {
+      console.error('Error fetching search episodes:', error);
+    }
+  };
+
   useEffect(() => {
-    getEpisodes()
-      .then(data => setEpisodes(data))
-      .catch(error => console.log(error));
-  }, []);
+      fetchAllEpisodes();
+  }, [seasonFilter]);
+
+  useEffect(() => {
+      fetchEpisodesBySearch();
+  }, [search]);
 
   const filteredEpisodes = episodes.filter((episode) => {
-    const episodeSeason = episode.episode.split('E')[0];
-    const seasonMatch = seasonFilter === 'all' || episodeSeason === seasonFilter;
-    const nameMatch = episode.name.toLowerCase().includes(search.toLowerCase());
-    return seasonMatch && nameMatch;
+    return episode.name.toLowerCase().includes(search.toLowerCase());
   });
 
   const pageCount = Math.ceil(filteredEpisodes.length / PageSize);
@@ -38,11 +75,11 @@ const Episodes = () => {
       <h1 className="text-customgreen p-2"> Episodes </h1>
       <EpisodeButton setSeasonFilter={setSeasonFilter} />
       <EpisodeList filteredEpisodes={currentEpisodes} />
-      
+
       <Pagination
         currentPage={currentPage}
         pageCount={pageCount}
-        onPageChange={changePage} 
+        onPageChange={changePage}
       />
     </div>
   );

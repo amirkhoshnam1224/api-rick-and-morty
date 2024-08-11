@@ -3,7 +3,7 @@ import './Characters.css';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import CharacterList from '../../components/Character/CharacterList/CharacterList';
-import { getCharacters } from '../../Api/Api'
+import axios from 'axios';
 import Pagination from '../../components/Pagination/Pagination';
 
 function Characters() {
@@ -13,25 +13,30 @@ function Characters() {
   const [speciesFilter, setSpeciesFilter] = useState('all');
   const [genderFilter, setGenderFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
   const PageSize = 8;
 
+  const fetchCharacters = async () => {
+    try {
+      const response = await axios.get('https://rickandmortyapi.com/api/character', {
+        params: {
+          name: search,
+          status: statusFilter !== 'all' ? statusFilter : undefined,
+          species: speciesFilter !== 'all' ? speciesFilter : undefined,
+          gender: genderFilter !== 'all' ? genderFilter : undefined,
+          page: currentPage,
+        },
+      });
+      setCharacters(response.data.results);
+      setPageCount(response.data.info.pages);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    getCharacters()
-      .then(data => setCharacters(data))
-      .catch(error => console.error(error))
-  }, []);
-
-  const filteredCharacters = characters
-    .filter(character => {
-      const resultStatus = statusFilter === 'all' || character.status.toLowerCase() === statusFilter;
-      const resultSpecies = speciesFilter === 'all' || character.species.toLowerCase() === speciesFilter;
-      const resultGender = genderFilter === 'all' || character.gender.toLowerCase() === genderFilter;
-      return resultStatus && resultSpecies && resultGender;
-    })
-    .filter(character => character.name.toLowerCase().includes(search.toLowerCase()));
-
-  const pageCount = Math.ceil(filteredCharacters.length / PageSize);
-  const currentCharacters = filteredCharacters.slice((currentPage - 1) * PageSize, currentPage * PageSize);
+    fetchCharacters();
+  }, [search, statusFilter, speciesFilter, genderFilter, currentPage]);
 
   const changePage = (newPage) => {
     setCurrentPage(newPage);
@@ -46,10 +51,10 @@ function Characters() {
         <h1 className='px-4 py-2 text-customgreen rounded-md mr-2'>GENDER</h1>
       </div>
       <div className="">
-        <FilterBar setStatusFilter={setStatusFilter}setSpeciesFilter={setSpeciesFilter}setGenderFilter={setGenderFilter}/>
+        <FilterBar setStatusFilter={setStatusFilter} setSpeciesFilter={setSpeciesFilter} setGenderFilter={setGenderFilter} />
       </div>
-      <CharacterList filteredCharacters={currentCharacters} />
-      <Pagination currentPage={currentPage} pageCount={pageCount} onPageChange={changePage}/>
+      <CharacterList filteredCharacters={characters} />
+      <Pagination currentPage={currentPage} pageCount={pageCount} onPageChange={changePage} />
     </div>
   );
 }

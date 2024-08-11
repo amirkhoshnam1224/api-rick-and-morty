@@ -9,7 +9,6 @@ function EpisodeButton({setSeasonFilter}) {
             <button onClick={() => setSeasonFilter('S03')} className="h-10 pl-4 pr-4 bg-blue-500 text-white rounded-md">Season 3</button>
             <button onClick={() => setSeasonFilter('S04')} className="h-10 pl-4 pr-4 bg-blue-500 text-white rounded-md">Season 4</button>
             <button onClick={() => setSeasonFilter('S05')} className="h-10 pl-4 pr-4 bg-blue-500 text-white rounded-md">Season 5</button>
-            <button onClick={() => setSeasonFilter('S06')} className="h-10 pl-4 pr-4 bg-blue-500 text-white rounded-md">Season 6</button>
         </div>
     </>);
 }
