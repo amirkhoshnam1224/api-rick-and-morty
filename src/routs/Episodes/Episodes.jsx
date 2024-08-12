@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import EpisodeButton from '../../components/Episode/EpisodeButton/EpisodeButton';
 import EpisodeList from '../../components/Episode/EpisodeList/EpisodeList';
@@ -12,6 +12,16 @@ const Episodes = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const PageSize = 12;
 
+  function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  }
+//loop requests for resived all episodes
   const fetchAllEpisodes = async () => {
     let allEpisodes = [];
     let page = 1;
@@ -36,32 +46,33 @@ const Episodes = () => {
       console.error('Error fetching episodes:', error);
     }
   };
-
-  const fetchEpisodesBySearch = async () => {
-    try {
-      const response = await axios.get('https://rickandmortyapi.com/api/episode', {
-        params: {
-          name: search,
-        },
-      });
-      setEpisodes(response.data.results);
-    } catch (error) {
-      console.error('Error fetching search episodes:', error);
-    }
-  };
-
+//Episode requests debounced
+  const debouncedFetchEpisodesBySearch = useCallback(
+    debounce(async (searchTerm) => {
+      try {
+        const response = await axios.get('https://rickandmortyapi.com/api/episode', {
+          params: {
+            name: searchTerm,
+          },
+        });
+        setEpisodes(response.data.results);
+        console.log('debunced for 2000')
+      } catch (error) {
+        console.error('Error fetching search episodes:', error);
+      }
+    }, 1000), 
+    []
+  );
+//dependencies rerenders
   useEffect(() => {
+      debouncedFetchEpisodesBySearch(search);
       fetchAllEpisodes();
-  }, [seasonFilter]);
-
-  useEffect(() => {
-      fetchEpisodesBySearch();
-  }, [search]);
+  }, [search, seasonFilter, debouncedFetchEpisodesBySearch]);
 
   const filteredEpisodes = episodes.filter((episode) => {
     return episode.name.toLowerCase().includes(search.toLowerCase());
   });
-
+//pagination
   const pageCount = Math.ceil(filteredEpisodes.length / PageSize);
   const currentEpisodes = filteredEpisodes.slice((currentPage - 1) * PageSize, currentPage * PageSize);
 
